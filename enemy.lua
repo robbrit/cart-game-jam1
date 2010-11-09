@@ -2,18 +2,15 @@ function Enemy(image)
   local stuff = {}
   stuff.image = image
 
+  speed = 0.05
+
   -- put me at a random location
-  angle = math.random(360)
-
-  radius = 400
-  speed = 0.2
-
-  stuff.x = math.cos(angle * math.pi / 180) * radius
-  stuff.y = math.sin(angle * math.pi / 180) * radius
+  stuff.x = math.random(love.graphics.getWidth() - image:getWidth())
+  stuff.y = -image:getHeight()
 
   -- move it towards the centre
-  stuff.vx = (love.graphics.getWidth() / 2 - stuff.x) / radius * speed
-  stuff.vy = (love.graphics.getHeight() / 2 - stuff.y) / radius * speed
+  stuff.vx = 0
+  stuff.vy = speed
 
   return stuff
 end

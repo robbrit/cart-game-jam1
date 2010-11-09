@@ -1,11 +1,16 @@
 require "enemy.lua"
 
 enemies = {}
+assets = {}
 MAXFPS = 30
+
+lastEnemy = 0
+enemiesAt = 3
 
 function love.load()
 	math.randomseed( os.time() )
-  enemies[0] = Enemy(love.graphics.newImage("chicken.png"))
+
+  assets["chicken"] = love.graphics.newImage("chicken.png")
 
   music = love.audio.newSource("02 - Let It Die.mp3") -- if "static" is omitted, LÖVE will stream the file from disk, good for longer music tracks
   local f = love.graphics.newFont(12)
@@ -27,10 +32,24 @@ function love.update(dt)
   end
   mouseX, mouseY = love.mouse.getPosition()
 
+  -- this is to know where to insert the enemy in the enemies table
+  lastI = 0
+
   for i, enemy in pairs(enemies) do
     updateEnemy(enemy, ms)
+
+    if enemy.y > love.graphics.getHeight() then
+      table.remove(enemies, i)
+    end
+    lastI = i
   end
 
+  -- see if we add a new enemy yet
+  now = os.time()
+  if now > lastEnemy + enemiesAt and math.random(100) < 50 then
+    table.insert(enemies, lastI + 1, Enemy(assets["chicken"]))
+    lastEnemy = now
+  end
 end
 
 function love.mousepressed(x, y, button)

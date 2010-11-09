@@ -33,19 +33,32 @@ function love.load()
   local f = love.graphics.newFont(12)
   love.audio.play(music)
   love.graphics.setFont(f)
-  love.graphics.setBackgroundColor(255,255,255)
+  love.graphics.setBackgroundColor(0,0,0)
 
   --Pointer stuff
   love.mouse.setVisible(false)
   pointer = {image=love.graphics.newImage("images/ship.png"), width, height}
   pointer.width = pointer.image:getWidth()
   pointer.height = pointer.image:getHeight()
+
+  --Font stuff
+  fonts = {
+        title= { 
+            normal = love.graphics.newFont("clonewars.ttf"),
+            larger = love.graphics.newFont("clonewars.ttf", 36),
+            largest = love.graphics.newFont("clonewars.ttf", 46)
+        }
+  }
+  playerScore = 0
+
 end
 
 function love.draw()
   for i, enemy in pairs(enemies) do
     love.graphics.draw(enemy["image"], math.floor(enemy["x"]), math.floor(enemy["y"]))
   end
+  love.graphics.setFont(fonts.title.larger)
+  love.graphics.print("Score: "..playerScore, 38, 550)
   love.graphics.draw(pointer.image, love.mouse.getX(), love.mouse.getY(), 0, 1, 1, pointer.width/2, pointer.height/2)
 end
 

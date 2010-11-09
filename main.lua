@@ -1,4 +1,12 @@
 require "explosions.lua"
+require "enemy.lua"
+
+enemies = {}
+assets = {}
+MAXFPS = 30
+
+lastEnemy = 0
+enemiesAt = 3
 
 function explosion(x, y)
     image = love.graphics.newImage("part1.jpg") 
@@ -11,23 +19,50 @@ function explosion(x, y)
     print("exploding")
 end
 
-function love.load()
-   music = love.audio.newSource("02 - Let It Die.mp3") -- if "static" is omitted, LÖVE will stream the file from disk, good for longer music tracks
-   local f = love.graphics.newFont(12)
-   love.audio.play(music)
-   love.graphics.setFont(f)
-   love.graphics.setBackgroundColor(255,255,255)
-   explosion(50, 50)
-end
 
-function love.update(dt)
-    mouseX, mouseY = love.mouse.getPosition()
-   --[[ print("mouseX: " .. mouseX)]]--
-   --[[ print("mouseY: " .. mouseY)]]--
+function love.load()
+	math.randomseed( os.time() )
+
+  assets["chicken"] = love.graphics.newImage("chicken.png")
+
+  music = love.audio.newSource("02 - Let It Die.mp3") -- if "static" is omitted, LÖVE will stream the file from disk, good for longer music tracks
+  local f = love.graphics.newFont(12)
+  love.audio.play(music)
+  love.graphics.setFont(f)
+  love.graphics.setBackgroundColor(255,255,255)
 end
 
 function love.draw()
-   love.graphics.print("done", 10, 10)
+  for i, enemy in pairs(enemies) do
+    love.graphics.draw(enemy["image"], math.floor(enemy["x"]), math.floor(enemy["y"]))
+  end
+end
+
+function love.update(dt)
+  local ms = (1000 / MAXFPS) - (dt * 1000)
+  if ms > 0 then
+    love.timer.sleep(ms)
+  end
+  mouseX, mouseY = love.mouse.getPosition()
+
+  -- this is to know where to insert the enemy in the enemies table
+  lastI = 0
+
+  for i, enemy in pairs(enemies) do
+    updateEnemy(enemy, ms)
+
+    if enemy.y > love.graphics.getHeight() then
+      table.remove(enemies, i)
+    end
+    lastI = i
+  end
+
+  -- see if we add a new enemy yet
+  now = os.time()
+  if now > lastEnemy + enemiesAt and math.random(100) < 50 then
+    table.insert(enemies, lastI + 1, Enemy(assets["chicken"]))
+    lastEnemy = now
+  end
 end
 
 function love.mousepressed(x, y, button)
@@ -38,17 +73,17 @@ function love.mousepressed(x, y, button)
 end
 
 function love.mousereleased(x, y, button)
-   if button == 'l' then
-      print("hello")
-   end
+  if button == 'l' then
+    print("hello")
+  end
 end
 
 function love.keypressed(key, unicode)
-   if key == 'b' then
-      print("b pressed")
-   elseif key == 'a' then
-      print("a pressed")
-   end
+  if key == 'b' then
+    print("b pressed")
+  elseif key == 'a' then
+    print("a pressed")
+  end
 end
 
 function love.keyreleased(key, unicode)

@@ -8,7 +8,9 @@ function love.load()
 end
 
 function love.update(dt)
-
+    mouseX, mouseY = love.mouse.getPosition()
+    print("mouseX: " .. mouseX)
+    print("mouseY: " .. mouseY)
 end
 
 function love.draw()

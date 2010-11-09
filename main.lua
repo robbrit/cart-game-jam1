@@ -2,6 +2,7 @@ require "explosions.lua"
 require "enemy.lua"
 
 enemies = {}
+projectiles = {}
 assets = {}
 MAXFPS = 30
 
@@ -19,6 +20,9 @@ function explosion(x, y)
     print("exploding")
 end
 
+function addEnemy(enemy)
+  table.insert(enemies, enemy)
+end
 
 function love.load()
 	math.randomseed( os.time() )

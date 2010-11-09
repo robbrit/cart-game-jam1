@@ -1,3 +1,4 @@
+require "explosions.lua"
 require "enemy.lua"
 
 enemies = {}
@@ -6,6 +7,18 @@ MAXFPS = 30
 
 lastEnemy = 0
 enemiesAt = 3
+
+function explosion(x, y)
+    image = love.graphics.newImage("part1.jpg") 
+    buffer = 20
+    A = love.graphics.newParticleSystem( image, buffer)
+    A:setSpin(1, 2, 0.5)
+    A:setPosition(x, y)
+    A:setLifetime(3)
+    --[[love.graphics.draw(A, x, y)]]--
+    print("exploding")
+end
+
 
 function love.load()
 	math.randomseed( os.time() )
@@ -50,11 +63,10 @@ function love.update(dt)
 end
 
 function love.mousepressed(x, y, button)
-  if button == 'l' then
-    imgx = x -- move image to where mouse clicked
-    imgy = y
-  end
-  love.graphics.draw(image, imgx, imgy)
+   if button == 'l' then
+      imgx = x -- move image to where mouse clicked
+      imgy = y
+   end
 end
 
 function love.mousereleased(x, y, button)
@@ -72,9 +84,11 @@ function love.keypressed(key, unicode)
 end
 
 function love.keyreleased(key, unicode)
-  if key == 'b' then
-    print("b released")
-  elseif key == 'a' then
-    print("a released")
-  end
+   if key == 'b' then
+       
+   explosion(50, 50)
+      print("b released")
+   elseif key == 'a' then
+      print("a released")
+   end
 end

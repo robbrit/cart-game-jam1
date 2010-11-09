@@ -25,6 +25,23 @@ function addEnemy(enemy)
 end
 
 function love.load()
+	bg1Y = bg1Y + 2
+	bg2Y = bg2Y + 2
+	if bg1Y == 0 then
+		bg2Y = -bg2:getHeight()
+	end
+	
+	if bg2Y == 0 then
+		bg1Y = -bg1:getHeight()
+	end
+
+bg2 = love.graphics.newImage("images/background2.png")
+	bg2X = 0
+	bg2Y = -2048
+	bg1 = love.graphics.newImage("images/background1.png")
+	bg1X = 0
+	bg1Y = 0
+
 	math.randomseed( os.time() )
 
   loadEnemyAssets(assets)

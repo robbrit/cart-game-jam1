@@ -30,12 +30,19 @@ function love.load()
   love.audio.play(music)
   love.graphics.setFont(f)
   love.graphics.setBackgroundColor(255,255,255)
+
+  --Pointer stuff
+  love.mouse.setVisible(false)
+  pointer = {image=love.graphics.newImage("images/ship.png"), width, height}
+  pointer.width = pointer.image:getWidth()
+  pointer.height = pointer.image:getHeight()
 end
 
 function love.draw()
   for i, enemy in pairs(enemies) do
     love.graphics.draw(enemy["image"], math.floor(enemy["x"]), math.floor(enemy["y"]))
   end
+  love.graphics.draw(pointer.image, love.mouse.getX(), love.mouse.getY(), 0, 1, 1, pointer.width/2, pointer.height/2)
 end
 
 function love.update(dt)

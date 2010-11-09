@@ -25,15 +25,6 @@ function addEnemy(enemy)
 end
 
 function love.load()
-	bg1Y = bg1Y + 2
-	bg2Y = bg2Y + 2
-	if bg1Y == 0 then
-		bg2Y = -bg2:getHeight()
-	end
-	
-	if bg2Y == 0 then
-		bg1Y = -bg1:getHeight()
-	end
 
 bg2 = love.graphics.newImage("images/background2.png")
 	bg2X = 0
@@ -71,6 +62,8 @@ bg2 = love.graphics.newImage("images/background2.png")
 end
 
 function love.draw()
+love.graphics.draw(bg2, bg2X, bg2Y)
+	love.graphics.draw(bg1, bg1X, bg1Y)
   for i, enemy in pairs(enemies) do
     love.graphics.draw(enemy["image"], math.floor(enemy["x"]), math.floor(enemy["y"]))
   end
@@ -80,6 +73,16 @@ function love.draw()
 end
 
 function love.update(dt)
+bg1Y = bg1Y + 2
+	bg2Y = bg2Y + 2
+	if bg1Y == 0 then
+		bg2Y = -bg2:getHeight()
+	end
+	
+	if bg2Y == 0 then
+		bg1Y = -bg1:getHeight()
+	end
+
   local ms = (1000 / MAXFPS) - (dt * 1000)
   if ms > 0 then
     love.timer.sleep(ms)
